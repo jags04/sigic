@@ -44,7 +44,11 @@ class AmbitosController extends Controller
                 "ambitos.paeconomica",
                 "ambitos.paproductiva",
                 DB::raw("(select count(ambitos_poligonos.id) from ambitos_poligonos where ambitos_poligonos.ambito_id = ambitos.id) as poligonos"),
-                "ambitos.foto"
+                DB::raw("(select count(*) from plantas where plantas.status = 'ACTIVO' AND plantas.ambito = ambitos.nombre ) as emp_activas"),
+                DB::raw("(select avg(planta_info_comp.coperativa) from planta_info_comp INNER JOIN plantas on plantas.id = planta_info_comp.planta_id where plantas.ambito =ambitos.nombre ) as productividad"),
+
+                "ambitos.foto",
+                "ambitos.mapa"
             );
         /*->where('oficina.nombre', 'NOT ILIKE', '%DELETE%');
         if(Auth::user()->rol == 30){
@@ -62,10 +66,19 @@ class AmbitosController extends Controller
             })
             ->editColumn('foto', function($amb) {
                 if(empty($amb->foto)){
-                    return '<a href="javascript:;" onclick="uploadFoto('.$amb->id.')" >[ Subir foto ]</a>';
+                    return '<a href="javascript:;" onclick="uploadFoto('.$amb->id.', \'foto\')" >[ Subir ]</a>';
                 }
                 else{
-                    return '<span class="text-success"><strong>[ Foto Subida ]</strong></span>';
+                    return '<span class="text-success"><strong>[ Subida ]</strong></span>';
+
+                }
+            })
+            ->editColumn('mapa', function($amb) {
+                if(empty($amb->mapa)){
+                    return '<a href="javascript:;" onclick="uploadFoto('.$amb->id.', \'mapa\')" >[ Subir ]</a>';
+                }
+                else{
+                    return '<span class="text-success"><strong>[ Subido ]</strong></span>';
 
                 }
             })
@@ -86,7 +99,7 @@ class AmbitosController extends Controller
             /*->filterColumn('fecha', function ($query, $keyword) {
                 $query->whereRaw("to_char(fecha, 'DD/MM/YYYY') ilike ?", ["%$keyword%"]);
             })*/
-            ->rawColumns(['poligonos','foto','accion'])
+            ->rawColumns(['poligonos','foto','mapa','accion'])
             ->make(true);
 
     }
@@ -269,7 +282,10 @@ class AmbitosController extends Controller
                     "ambitos.iinactivos",
                     "ambitos.paeconomica",
                     "ambitos.paproductiva",
-                    "ambitos.foto")
+                    "ambitos.foto",
+                    "ambitos.mapa",
+                    DB::raw("(select count(*) from plantas where plantas.status = 'ACTIVO' AND plantas.ambito = ambitos.nombre ) as emp_activas"),
+                    DB::raw("(select avg(planta_info_comp.coperativa) from planta_info_comp INNER JOIN plantas on plantas.id = planta_info_comp.planta_id where plantas.ambito =ambitos.nombre ) as productividad"))
                 ->where('ambitos.id', '=', $request->id)->get();
             return response()->json($ambitos);
 
@@ -318,11 +334,19 @@ class AmbitosController extends Controller
         //dd($request->all());
         try{
             //
+
+            if($request->cnd == 'foto'){
+                $directorio = '/ambitos';
+            }
+            elseif($request->cnd == 'mapa'){
+                $directorio = '/ambitos_mapa';
+            }
+
             $image = $request->file('file');
             $name = explode('.', $image->getClientOriginalName());
             $input['imagename'] = time().'_'.$name[0].'.'.$image->getClientOriginalExtension();
             //dd($image->getRealPath());
-            $destinationPath = public_path().'/imagenes/ambitos';
+            $destinationPath = public_path().'/imagenes'.$directorio;
 
             if($image->move($destinationPath, $input['imagename'])){
                 $img = Image::make($destinationPath.'/'.$input['imagename']);
@@ -331,12 +355,16 @@ class AmbitosController extends Controller
                 });
                 if($img->save($destinationPath.'/'.$input['imagename'],90)){
                     $info = Ambito::find($request->id);
-
-                    $info->foto = $input['imagename'];
-
+                    if($request->cnd == 'foto') {
+                        $info->foto = $input['imagename'];
+                    }
+                    elseif($request->cnd == 'mapa'){
+                        $info->mapa = $input['imagename'];
+                    }
 
                     if($info->update()){
-                        UtilidadesController::setLog(Auth::user()->user, 'AMBITOS - SUBIR FOTO', 'ACTUALIZAR - '.$request->id);
+
+                        UtilidadesController::setLog(Auth::user()->user, 'AMBITOS - SUBIR '.mb_strtoupper($request->cnd), 'ACTUALIZAR - '.$request->id);
                         return response()->json(array(
                             'status' => 1,
                             'msg' => 'Imagen cargada',
@@ -371,17 +399,30 @@ class AmbitosController extends Controller
             try{
 
                 $error = 0;
-                $foto = DB::table('ambitos')->select('foto')->where('id', $request->id)->first();
-                if(unlink(public_path().'/imagenes/ambitos/'.$foto->foto)) {
-                    $visita = Ambito::find($request->id);
-                    $visita->foto = '';
-                    $visita->update();
-                    $error = 0;
+                if($request->cnd == 'foto'){
+                    $foto = DB::table('ambitos')->select('foto')->where('id', $request->id)->first();
+                    if(unlink(public_path().'/imagenes/ambitos/'.$foto->foto)) {
+                        $visita = Ambito::find($request->id);
+                        $visita->foto = '';
+                        $visita->update();
+                        $error = 0;
+                    }
+                    else{
+                        $error = 1;
+                    }
                 }
-                else{
-                    $error = 1;
+                elseif($request->cnd == 'mapa'){
+                    $mapa = DB::table('ambitos')->select('mapa')->where('id', $request->id)->first();
+                    if(unlink(public_path().'/imagenes/ambitos_mapa/'.$mapa->mapa)) {
+                        $visita = Ambito::find($request->id);
+                        $visita->mapa = '';
+                        $visita->update();
+                        $error = 0;
+                    }
+                    else{
+                        $error = 1;
+                    }
                 }
-
 
                 if($error == 0){
                     return response()->json(array(

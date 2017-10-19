@@ -63,7 +63,10 @@ $(function(){
                 { data: 'paeconomica', name: 'ambitos.paeconomica', orderable: false, searchable: false, visible: false },
                 { data: 'paproductiva', name: 'ambitos.paproductiva' , 'width': '30%' },
                 { data: 'poligonos', name: 'poligonos', searchable: false},
+                { data: 'productividad', name: 'productividad', orderable: false, searchable: false, visible: false },
+                { data: 'emp_activas', name: 'emp_activas', orderable: false, searchable: false, visible: false },
                 { data: 'foto', name: 'foto', orderable: false, searchable: false, 'width': '10%' },
+                { data: 'mapa', name: 'mapa', orderable: false, searchable: false, 'width': '10%' },
                 { data: 'accion', name: 'accion', orderable: false, searchable: false, 'width': '20%' }
             ],
         initComplete: function () {
@@ -222,12 +225,20 @@ $(function(){
                         '<div class="row">'+
                         '<div class="col-md-6">Ppal act económica: <strong>'+item.paeconomica+'</strong></div>'+
                         '<div class="col-md-6">Ppal act productiva: <strong>'+item.paproductiva+'</strong></div>'+
+                        '</div>';
+                    html +='<div class="row">'+
+                        '<div class="col-md-6">Plantas activas (Actualización): <strong>'+item.emp_activas+'</strong></div>'+
+                        '<div class="col-md-6">Productividad: <strong>'+item.productividad+' %</strong></div>'+
                         '</div><br><br>';
+                    html +='<div class="row">';
                     if(item.foto != ''){
-                        html +='<div class="row">'+
-                        '<div class="col-md-12 text-center"><img src="imagenes/ambitos/'+item.foto+'" title="Click para eliminar" onclick="eliminarFoto('+item.id+')"></div>'+
-                        '</div><br><br>';
+                        html +='<div class="col-md-6 text-center"><img src="imagenes/ambitos/'+item.foto+'" title="Click para eliminar" onclick="eliminarFoto('+item.id+', \'foto\')" class="img-responsive img-rounded"></div>';
                     }
+
+                    if(item.mapa != ''){
+                        html +='<div class="col-md-6 text-center"><img src="imagenes/ambitos_mapa/'+item.mapa+'" title="Click para eliminar" onclick="eliminarFoto('+item.id+', \'mapa\')"  class="img-responsive img-rounded"></div>';
+                    }
+                    html +='</div><br><br>'
                     $id = item.id;
                 })
 
@@ -289,7 +300,7 @@ $(function(){
         }
     });
 
-    uploadFoto = function(ide){
+    uploadFoto = function(ide, cnd){
 
         $( '#uplFoto' ).modal('show');
 
@@ -297,7 +308,7 @@ $(function(){
             action: $('#url-uplFoto').data('url'),
             label: '<br><i class="fa fa-upload fa-5x"></i>',
             multiple: false,
-            postData: { id : ide},
+            postData: { id : ide, "cnd" : cnd},
             autoUpload: true,
             //maxSize: 1073741824,
             maxSize: 2097152, // 2mb
@@ -441,7 +452,7 @@ function onChunkError(e, file, error) {
 }
 
 
-function eliminarFoto(id){
+function eliminarFoto(id, cnd){
     swal({
         title: "¿Esta seguro que quiere borrar esta imagen?",
         text: "Esta acción no puede ser desecha",
@@ -454,7 +465,7 @@ function eliminarFoto(id){
         $.ajax({
             type: "POST",
             url:$('#url-delFoto').data('url'),
-            data: { "id": id},
+            data: { "id": id, "cnd": cnd},
         success: function( data ) {
             if(data.status == 1){
                 swal(data.msg, "", "success");
@@ -467,5 +478,7 @@ function eliminarFoto(id){
     });
     });
 }
+
+
 
 

@@ -100,6 +100,29 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class=" icon-layers font-blue"></i>
+                        <span class="caption-subject font-blue bold uppercase">Plantas</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" onclick="verMapa('Plantas')">
+                            <i class="fa fa-external-link"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <iframe src="{{ route('sistema.mapasPlantas') }}" frameborder="0" ></iframe>
+                </div>
+            </div>
+            <!-- END MARKERS PORTLET-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <!-- BEGIN MARKERS PORTLET-->
+            <div class="portlet light portlet-fit bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class=" icon-layers font-blue"></i>
                         <span class="caption-subject font-blue bold uppercase">Distribución</span>
                     </div>
                     <div class="actions">
@@ -114,9 +137,6 @@
             </div>
             <!-- END MARKERS PORTLET-->
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-6">
             <!-- BEGIN MARKERS PORTLET-->
             <div class="portlet light portlet-fit bordered">
@@ -152,7 +172,7 @@
         function verMapa(cnd){
             var strWindowFeatures = "location=no, menubar=no, titlebar=no, resizable=yes, toolbar=no, menubar=no, width="+$( window ).width()+", height="+$( window ).height();
 
-            var url = (cnd == 'Industrias')? "{!! route('sistema.panelIndustria') !!}" : (cnd == 'Comercios')? "{!! route('sistema.panelComercio') !!}" : "{!! route('sistema.panelAmbitos') !!}";
+            var url = (cnd == 'Industrias')? "{!! route('sistema.panelIndustria') !!}" : (cnd == 'Comercios')? "{!! route('sistema.panelComercio') !!}" : (cnd == 'Plantas')? "{!! route('sistema.panelPlantas') !!}" : "{!! route('sistema.panelAmbitos') !!}";
 
             window.open( url , "Mapa "+cnd, strWindowFeatures);
         }

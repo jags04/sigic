@@ -56,6 +56,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
+    Route::get('/mapasPanelPlantas',          ['uses' => 'MapasController@getPanelPlantas',          'as' => 'sistema.panelPlantas']);
+    Route::get('/mapasPlantas',               ['uses' => 'MapasController@getMapaPlantas',           'as' => 'sistema.mapasPlantas']);
+    Route::get('/mapasKmzPlantas.kmz',        ['uses' => 'MapasController@getKmzPlantas',            'as' => 'sistema.getKmzPlantas']);
+
+
+
+
     Route::get('/dataProduccion',             ['uses' => 'GraficosController@getDataProduccion',     'as' => 'sistema.dataProduccion']);
     Route::get('/dataAsignacion',             ['uses' => 'GraficosController@getDataAsignacion',     'as' => 'sistema.dataAsignacion']);
     Route::get('/dataProdAsigAnual',          ['uses' => 'GraficosController@getDataProduccionAsignacionAnual', 'as' => 'sistema.dataProdAsigAnual']);

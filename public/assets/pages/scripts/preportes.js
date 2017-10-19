@@ -45,15 +45,24 @@ $(function() {
             ajax: url,
             columns: [
                 {data: 'fecha', name: 'planta_info_comp.fecha', orderable: false, searchable: false},
-                {data: 'rif', name: 'empresas.rif', orderable: false, searchable: false, visible: false},
-                {data: 'rsocial', name: 'empresas.rsocial', orderable: false, searchable: false},
-                {data: 'sector', name: 'empresas.sector', orderable: false, searchable: false },
+                {data: 'rif', name: 'empresas.rif' },
+                {data: 'rsocial', name: 'empresas.rsocial' },
+                {data: 'sector', name: 'empresas.sector' },
                 {data: 'subsector', name: 'empresas.subsector', orderable: false, searchable: false, visible: false},
+
+                {data: 'rlegal', name: 'empresas.rlegal', orderable: false, searchable: false, visible: false},
+                {data: 'ci', name: 'empresas.ci', orderable: false, searchable: false, visible: false},
+                {data: 'telefonos', name: 'empresas.telefonos', orderable: false, searchable: false, visible: false},
+
+
+
                 {data: 'estado', name: 'plantas.estado'},
                 {data: 'municipio', name: 'plantas.municipio', orderable: false, searchable: false, visible: false},
                 {data: 'parroquia', name: 'plantas.parroquia', orderable: false, searchable: false, visible: false},
                 {data: 'status', name: 'plantas.status', orderable: false, searchable: false, visible: false},
                 {data: 'ambito', name: 'plantas.ambito'},
+                {data: 'telf', name: 'plantas.telf', orderable: false, searchable: false, visible: false},
+
                 {data: 'mobra', name: 'planta_info_comp.mobra', orderable: false, searchable: false, visible: false},
                 {data: 'cinstalada', name: 'planta_info_comp.cinstalada', orderable: false, searchable: false},
                 {data: 'coperativa', name: 'planta_info_comp.coperativa', orderable: false, searchable: false},

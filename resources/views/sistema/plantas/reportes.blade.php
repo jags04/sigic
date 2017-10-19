@@ -186,11 +186,15 @@
                                     <th>Empresa</th>
                                     <th>Sector</th>
                                     <th>Subsector</th>
+                                    <th>R legal</th>
+                                    <th>CI</th>
+                                    <th>Telefonos</th>
                                     <th>Estado</th>
                                     <th>Municipio</th>
                                     <th>Parroquia</th>
                                     <th>Estatus</th>
                                     <th>Ámbito</th>
+                                    <th>Telf. planta</th>
                                     <th>M obra</th>
                                     <th>Cap instalada (mes)</th>
                                     <th>Cap operativa (mes)</th>

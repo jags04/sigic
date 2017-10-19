@@ -60,7 +60,12 @@
                             <th>Ppal act económica</th>
                             <th>Ppal act productiva</th>
                             <th title="Nº poligonos">Pol</th>
+
+                            <th>Productividad</th>
+                            <th>Plantas activas</th>
+
                             <th>Foto</th>
+                            <th>Mapa</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
@@ -77,6 +82,9 @@
                             <th>Inmuebles inactivos</th>
                             <th>Ppal act económica</th>
                             <th>Ppal act productiva</th>
+                            <th>&nbsp;</th>
+                            <th></th>
+                            <th></th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>

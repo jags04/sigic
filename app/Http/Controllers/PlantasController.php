@@ -52,7 +52,7 @@ class PlantasController extends Controller
                 "plantas.latitud",
                 "plantas.longitud",
                 DB::raw("(select count(*) from planta_info_comp where planta_id = plantas.id) as visita"),
-                DB::raw("(select foto from planta_info_comp where planta_id = plantas.id) as foto"));
+                DB::raw("(select foto from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0) as foto"));
 
         return Datatables::of($plantas)
             ->editColumn('rif', function ($plan) {
@@ -117,7 +117,7 @@ class PlantasController extends Controller
             $planta->emp_rif = mb_strtoupper($request->emp_rif, 'UTF-8');
 
             if($planta->save()){
-                UtilidadesController::setLog(Auth::user()->user, 'PLANTAS', 'AGREGAR', mb_strtoupper($request->emp_rif));
+                UtilidadesController::setLog(Auth::user()->user, 'PLANTAS', 'AGREGAR', $request->emp_rif);
                 return response()->json(array(
                     'status' => 1,
                     'msg' => 'Registro agregado',
@@ -262,7 +262,7 @@ class PlantasController extends Controller
             $arr = array_map('strtoupper', $arr );
 
             if(InfoComplemantaria::create($arr)){
-                UtilidadesController::setLog(Auth::user()->user, 'PLANTAS-INFO COMPL', 'AGREGAR - '.$request->emp_rif);
+                UtilidadesController::setLog(Auth::user()->user, 'PLANTAS-INFO COMPL', 'AGREGAR - '.$request->planta_id);
                 return response()->json(array(
                     'status' => 1,
                     'msg' => 'Registro agregado',
@@ -522,11 +522,15 @@ class PlantasController extends Controller
                 "empresas.rsocial",
                 "empresas.sector",
                 "empresas.subsector",
+                "empresas.rlegal",
+                "empresas.ci",
+                "empresas.telefonos",
                 "plantas.estado",
                 "plantas.municipio",
                 "plantas.parroquia",
                 "plantas.status",
                 "plantas.ambito",
+                "plantas.telf",
                 "planta_info_comp.mobra",
                 "planta_info_comp.cinstalada",
                 "planta_info_comp.coperativa",

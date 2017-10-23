@@ -403,7 +403,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-md-line-input">
-                                            <textarea class="form-control" rows="3" placeholder="" readonly="readonly" required id="coordenadas" name="coordenadas"></textarea>
+                                            <textarea class="form-control" rows="3" placeholder="" @if(Auth::user()->rol != 10) readonly="readonly" @endif required id="coordenadas" name="coordenadas"></textarea>
                                             <label for="form_control_1">Coordenadas del polígono</label>
                                         </div>
                                     </div>

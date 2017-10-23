@@ -101,7 +101,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/preportes',                  ['uses' => 'PlantasController@getIndexReportes',       'as' => 'sistema.preportes']);
     Route::get('/preportes/getPlantasAct',    ['uses' => 'PlantasController@getPlantasActualizadas', 'as' => 'sistema.preportes.getPlantasAct']);
     Route::get('/preportes/getPocentajeProd', ['uses' => 'PlantasController@getPocentajeProd',       'as' => 'sistema.preportes.getPocentajeProd']);
-    Route::get('/preportes/getPocentajeProdEdo', ['uses' => 'PlantasController@getPocentajeProdEdo',       'as' => 'sistema.preportes.getPocentajeProdEdo']);
+    Route::get('/preportes/getPocentajeProdEdo', ['uses' => 'PlantasController@getPocentajeProdEdo', 'as' => 'sistema.preportes.getPocentajeProdEdo']);
+    Route::get('/preportes/getPlantaSeg',     ['uses' => 'PlantasController@getPlantasSegmentacion', 'as' => 'sistema.preportes.getPlantasSeg']);
+    Route::get('/preportes/getPlantaSegGraf', ['uses' => 'PlantasController@getPlantasSegGrafico', 'as' => 'sistema.preportes.getPlantasSegGraf']);
 
 
 

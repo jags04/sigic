@@ -601,7 +601,89 @@ class PlantasController extends Controller
             ->make(true);
     }
 
+    public function getPlantasSegmentacion(Request $request)
+    {
 
+
+        $gran = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'3 GRANDE' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where('planta_info_comp.mobra', '>', '100')
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
+            ->orderBy('descripcion', 'asc');
+
+
+
+        $med = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'2 MEDIANA' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where([['planta_info_comp.mobra', '>', '50'],['planta_info_comp.mobra', '<=', '100']])
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
+            ->union($gran);
+
+
+        $peq = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'1 PEQUEÑA' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where('planta_info_comp.mobra', '<=', '50')
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
+        ->union($med);
+        return Datatables::of($peq)
+            ->make(true);
+    }
+
+    public function getPlantasSegGrafico(Request $request)
+    {
+        $data = array();
+
+        $gran = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'GRANDE' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where('planta_info_comp.mobra', '>', '100')
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2]);
+
+        $med = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'MEDIANA' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where([['planta_info_comp.mobra', '>', '50'],['planta_info_comp.mobra', '<=', '100']])
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
+            ->union($gran);
+
+        $peq = DB::table('plantas')
+            ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
+            ->select(
+                DB::raw("'PEQUEÑA' as descripcion"),
+                DB::raw("count(*) as cant"))
+            ->where('planta_info_comp.mobra', '<=', '50')
+            ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
+            ->union($med)
+        ->get();
+
+        foreach ($peq as $p){
+
+            $data[] = "{name: '".$p->descripcion."', y: ".$p->cant.", sliced: true }";
+        }
+
+        $datos = [
+            ['f1' => UtilidadesController::convertirFecha($request->f1)],
+            ['f2' => UtilidadesController::convertirFecha($request->f2)],
+            ['data' => implode(',', $data)]
+        ];
+
+       // dd($datos);
+
+        return view('sistema.plantas.graficos.segPlanta', compact('datos'));
+    }
 
 
 }

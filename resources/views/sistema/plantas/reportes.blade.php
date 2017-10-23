@@ -7,6 +7,8 @@
     <link href="{{ URL::to('assets/global/plugins/formstone/dist/css/upload.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::to('assets/global/plugins/formstone/dist/css/themes/light/upload.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::to('assets/global/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet" type="text/css" />
+
+
     <style>
         tfoot {
             display: table-header-group;
@@ -160,6 +162,45 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-4 col-xs-12 col-sm-6">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span class="caption-subject bold uppercase">Segmentación Plantas</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <form id="qryPlanSeg">
+                        {{ csrf_field()  }}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group form-md-line-input has-success">
+                                    <input type="date" class="form-control" id="fps1" name="f1" required>
+                                    <label for="fps1">Fecha inicio<span class="required" aria-required="true">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group form-md-line-input has-success">
+                                    <input type="date" class="form-control" id="fps2" name="f2" required>
+                                    <label for="fps2">Fecha fin<span class="required" aria-required="true">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-no-border btn-outline green  pull-right">Consultar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modalPlantasActualizadas" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-full">
             <div class="modal-content">
@@ -206,23 +247,6 @@
                                     <th>Foto</th>
                                 </tr>
                                 </thead>
-                                <!--<tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th>Planta</th>
-                                    <th>Estado</th>
-                                    <th>Municipio</th>
-                                    <th>Parroquia</th>
-                                    <th>Dirección</th>
-                                    <th>Estatus</th>
-                                    <th>F Especifica</th>
-                                    <th>Teléfono</th>
-                                    <th>Ámbito</th>
-                                    <th>Lat</th>
-                                    <th>Long</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                                </tfoot>-->
                             </table>
                         </div>
                     </div>
@@ -318,6 +342,53 @@
         <!-- /.modal-dialog -->
     </div>
 
+    <div id="modalPlantasSeg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-full">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- BEGIN MARKERS PORTLET-->
+                    <div class="portlet light portlet-fit">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <span class="caption-subject font-green bold uppercase">Segmentación plantas (<span id="divSegFecha"></span>)</span>
+                            </div>
+                            <div class="actions">
+                                <a class="btn btn-circle btn-icon-only btn-default" data-dismiss="modal" aria-hidden="true">
+                                    <i class="fa fa-close"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <br><br><br>
+                                    <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pSeg" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.preportes.getPlantasSeg') !!}" data-urlgrafico="{!! route('sistema.preportes.getPlantasSegGraf') !!}">
+                                        <thead>
+                                        <tr>
+                                            <th>Descripcion</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="col-md-8">
+                                    <iframe id="ifrGrafSegPlan" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END MARKERS PORTLET-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-no-border btn-outline green">Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 
 
 
@@ -342,6 +413,8 @@
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyCcFZBu19UJ3rBx2HLn2ldA-6biMN37wh0" type="text/javascript"></script>
     <script src="{{ URL::to('assets/global/plugins/formstone/dist/js/core.js') }}" type="text/javascript"></script>
     <script src="{{ URL::to('assets/global/plugins/formstone/dist/js/upload.js') }}" type="text/javascript"></script>
+
+
 
 @endsection
 

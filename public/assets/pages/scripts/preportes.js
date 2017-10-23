@@ -53,9 +53,6 @@ $(function() {
                 {data: 'rlegal', name: 'empresas.rlegal', orderable: false, searchable: false, visible: false},
                 {data: 'ci', name: 'empresas.ci', orderable: false, searchable: false, visible: false},
                 {data: 'telefonos', name: 'empresas.telefonos', orderable: false, searchable: false, visible: false},
-
-
-
                 {data: 'estado', name: 'plantas.estado'},
                 {data: 'municipio', name: 'plantas.municipio', orderable: false, searchable: false, visible: false},
                 {data: 'parroquia', name: 'plantas.parroquia', orderable: false, searchable: false, visible: false},
@@ -76,7 +73,6 @@ $(function() {
         });
         return cdia;
     }
-
 
     $('#qryPorProd').validate({
         submitHandler: function (form) {
@@ -150,6 +146,45 @@ $(function() {
             columns: [
                 {data: 'estado', name: 'plantas.estado', orderable: false},
                 {data: 'produccion', name: 'produccion', orderable: false, searchable: false}
+            ]
+        });
+        return cdia;
+    }
+
+    $('#qryPlanSeg').validate({
+        submitHandler: function (form) {
+            fi = $("#fps1").val().split('-');
+            ff = $("#fps2").val().split('-');
+            $("#divSegFecha").html(fi[2] + '/' + fi[1] + '/' + fi[0] + ' al ' + ff[2] + '/' + ff[1] + '/' + ff[0])
+            dt_rppse = c_plan_seg($('#dt_pSeg').data('urldata') + '?f1=' + $("#fps1").val() + '&f2=' + $("#fps2").val(), $('#dt_pSeg').data('lenguaje'));
+            $("#modalPlantasSeg").modal('show');
+            $('#ifrGrafSegPlan').attr('src', $('#dt_pSeg').data('urlgrafico') + '?f1=' + $("#fps1").val() + '&f2=' + $("#fps2").val())
+        }
+    });
+
+    c_plan_seg = function (url, lg, f1, f2) {
+        cdia = $('#dt_pSeg').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            paging: false,
+            searching: false,
+            destroy: true,
+            order: [[0, "asc"]],
+            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
+            pageLength: 10,
+            dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel-o fa-lg"></i>',
+                titleAttr: 'Excel',
+                className: 'btn btn-no-border btn-sm green-meadow btn-outline'
+            }],
+            language: {url: lg},
+            ajax: url,
+            columns: [
+                {data: 'descripcion', name: 'descripcion', orderable: false, searchable: false},
+                {data: 'cant', name: 'cant', orderable: false, searchable: false}
             ]
         });
         return cdia;

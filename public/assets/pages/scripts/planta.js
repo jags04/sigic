@@ -78,6 +78,7 @@ $(function(){
                 { data: 'ambito', name: 'plantas.ambito' },
                 { data: 'latitud', name: 'plantas.latitud', orderable: false, searchable: false, visible: false },
                 { data: 'longitud', name: 'plantas.longitud', orderable: false, searchable: false, visible: false },
+                { data: 'actualizado', name: 'actualizado', orderable: false, searchable: false, visible: false },
                 { data: 'accion', name: 'accion', orderable: false, searchable: false, "width": "20%" }
             ],
         initComplete: function () {

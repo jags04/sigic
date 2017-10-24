@@ -52,7 +52,8 @@ class PlantasController extends Controller
                 "plantas.latitud",
                 "plantas.longitud",
                 DB::raw("(select count(*) from planta_info_comp where planta_id = plantas.id) as visita"),
-                DB::raw("(select foto from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0) as foto"));
+                DB::raw("(select foto from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0) as foto"),
+            DB::raw("(select users.nombre from users inner join logs on users.user = logs.usuario where (logs.modulo like 'PLANTAS-INFO COMPL' and logs.accion like 'AGREGAR%' and logs.accion like concat('%',plantas.id)) ORDER BY logs.created_at desc limit 1 offset 0) as actualizado"));
 
         return Datatables::of($plantas)
             ->editColumn('rif', function ($plan) {
@@ -562,7 +563,8 @@ class PlantasController extends Controller
                 "plantas.municipio",
                 "plantas.parroquia",
                 "plantas.ambito",
-                DB::raw("avg(planta_info_comp.coperativa) as produccion"))
+                DB::raw("avg(planta_info_comp.coperativa) as produccion"),
+                DB::raw("sum(planta_info_comp.mobra) as trabajadores"))
             //->where("plantas.fespecifica", "ilike", "%PRODUCC%")
             ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
             ->groupBy('plantas.estado')
@@ -683,6 +685,56 @@ class PlantasController extends Controller
        // dd($datos);
 
         return view('sistema.plantas.graficos.segPlanta', compact('datos'));
+    }
+
+
+    private function getDtosEdosOperatividad($request)
+    {
+        $where = '';
+        if( $request->f1!='' && $request->f2==''){
+
+            $where=" and planta_info_comp.fecha='".$request->f1."' ";
+        }
+        elseif($request->f2!='' && $request->f1 ==''){
+            $where=" and planta_info_comp.fecha='".$request->f2."' ";
+        }
+        elseif($request->f2 !='' && $request->f1 !=''){
+            $where=" and planta_info_comp.fecha between '".$request->f1."' and '".$request->f2."' ";
+        }
+        else{
+            $where=" fecha='".date('Y-m-d')."' ";
+        }
+
+        $subSql="(select round(avg(planta_info_comp.coperativa)::DECIMAL, 2) FROM estados INNER JOIN plantas ON plantas.estado = estados.nombre INNER JOIN planta_info_comp ON planta_info_comp.planta_id = plantas.id where estados.id = edo.id ".$where." GROUP BY estados.id, plantas.estado)";
+        $sql="select id,nombre, COALESCE(".$subSql.",".$subSql.",0) as cant from estados as edo  where id <> 25 order by id asc";
+
+        $return_arr = array();
+        $reporte = DB::select( DB::raw($sql));
+
+        if (count($reporte) > 0) {
+            foreach ($reporte as $r){
+                $row_array['id'] = $r->id;
+                $row_array['value'] = $r->cant;
+                array_push($return_arr,$row_array);
+            }
+        }
+
+        return response()->json($return_arr)->content();
+    }
+
+    public function getPlantasProdMap(Request $request)
+    {
+        $f1 = ($request->f1 == '' ) ? date('d/m/Y') : UtilidadesController::convertirFecha($request->f1);
+        $f2 = ($request->f2 == '' ) ? date('d/m/Y') : UtilidadesController::convertirFecha($request->f2);
+        $datos = array(
+            UtilidadesController::getPathEdosVzla(),
+            $this->getDtosEdosOperatividad($request),
+            UtilidadesController::getMapLabel(),
+            $f1,
+            $f2
+        );
+
+        return view('sistema.plantas.graficos.mapaProd', compact('datos'));
     }
 
 

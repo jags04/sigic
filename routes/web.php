@@ -103,7 +103,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/preportes/getPocentajeProd', ['uses' => 'PlantasController@getPocentajeProd',       'as' => 'sistema.preportes.getPocentajeProd']);
     Route::get('/preportes/getPocentajeProdEdo', ['uses' => 'PlantasController@getPocentajeProdEdo', 'as' => 'sistema.preportes.getPocentajeProdEdo']);
     Route::get('/preportes/getPlantaSeg',     ['uses' => 'PlantasController@getPlantasSegmentacion', 'as' => 'sistema.preportes.getPlantasSeg']);
-    Route::get('/preportes/getPlantaSegGraf', ['uses' => 'PlantasController@getPlantasSegGrafico', 'as' => 'sistema.preportes.getPlantasSegGraf']);
+    Route::get('/preportes/getPlantaSegGraf', ['uses' => 'PlantasController@getPlantasSegGrafico',   'as' => 'sistema.preportes.getPlantasSegGraf']);
+    Route::get('/preportes/getPlantasProdMap',['uses' => 'PlantasController@getPlantasProdMap',      'as' => 'sistema.preportes.getPlantasProdMap']);
+
+
+
 
 
 
@@ -155,8 +159,7 @@ Route::get('/empresas/visita',                  ['uses' => 'EmpresasController@g
 
 
 Route::get('/prueba', function () {
-    $roles = "30";
-    dd(\App\Http\Controllers\UtilidadesController::verificarRol($roles, 10));
+    dd(\App\Http\Controllers\UtilidadesController::getPathEdosVzla());
 });
 
 

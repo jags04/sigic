@@ -637,5 +637,38 @@ class UtilidadesController extends Controller
         }
     }
 
+    public static function getPathEdosVzla()
+    {
+        $sql="select id,nombre,path from estados order by id asc";
+
+        $return_arr = array();
+        $reporte = DB::select( DB::raw($sql));
+
+
+        if (count($reporte) > 0) {
+            foreach ($reporte as $r){
+                $row_array['id'] = $r->id;
+                $row_array['name'] = $r->nombre;
+                $row_array['path'] = $r->path;
+                array_push($return_arr,$row_array);
+            }
+        }
+
+        return response()->json($return_arr)->content();
+    }
+
+    public static function getMapLabel()
+    {
+        return "[
+           {from:0,to: 5,color: 'rgba(88, 0, 0, 0.02)'},
+           {from:5,to: 15,color: 'rgba(88, 0, 0, 0.2)'},
+           {from: 15,to: 30,color: 'rgba(88, 0, 0, 0.3)'},
+           {from: 30,to: 50,color: 'rgba(88, 0, 0, 0.5)'},
+           {from: 50,to: 75,color: 'rgba(88, 0, 0, 0.7)'},
+           {from: 75,to: 90,color: 'rgba(88, 0, 0, 0.8)'},
+           {from: 90,color:'rgba(88, 0, 0, 1)'}
+        ]";
+    }
+
 
 }

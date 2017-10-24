@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Highcharts</title>
 
-   <link href="{{ URL::to('assets/global/plugins/highcharts_5.0.4/css/highcharts.css') }}" rel="stylesheet" type="text/css" />
+  <!-- <link href="{{ URL::to('assets/global/plugins/highcharts_5.0.4/css/highcharts.css') }}" rel="stylesheet" type="text/css" />-->
     <style type="text/css">
         body, html {
             height: 100%;
@@ -21,12 +21,25 @@
 <div id="container"></div>
 
 <!--<script src="{{ URL::to('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>-->
-<script src="{{ URL::to('assets/global/plugins/highcharts_5.0.4/js/highcharts.js') }}" type="text/javascript"></script>
-<script src="{{ URL::to('assets/global/plugins/highcharts_5.0.4/js/highcharts-3d.js') }}" type="text/javascript"></script>
-<script src="{{ URL::to('assets/global/plugins/highcharts_5.0.4/js/highcharts-more.js') }}" type="text/javascript"></script>
-<script src="{{ URL::to('assets/global/plugins/highcharts_5.0.4/js/modules/exporting.js') }}" type="text/javascript"></script>
+<script src="{{ URL::to('assets/global/plugins/highcharts.6.0.2/highcharts.js') }}" type="text/javascript"></script>
+<script src="{{ URL::to('assets/global/plugins/highcharts.6.0.2/highcharts-3d.js') }}" type="text/javascript"></script>
+<script src="{{ URL::to('assets/global/plugins/highcharts.6.0.2/highcharts-more.js') }}" type="text/javascript"></script>
+<script src="{{ URL::to('assets/global/plugins/highcharts.6.0.2/modules/exporting.js') }}" type="text/javascript"></script>
 
 <script type="text/javascript">
+
+    Highcharts.setOptions({
+        colors: [
+            '#50B432',
+            '#ED561B',
+            '#DDDF00',
+            '#24CBE5',
+            '#64E572',
+            '#FF9655',
+            '#FFF263',
+            '#6AF9C4'
+        ]
+    });
 
        Highcharts.chart('container', {
             chart: {

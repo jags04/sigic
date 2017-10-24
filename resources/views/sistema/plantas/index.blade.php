@@ -75,6 +75,7 @@
                             <th>Ámbito</th>
                             <th>Lat</th>
                             <th>Long</th>
+                            <th>Actualizado por</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
@@ -92,6 +93,7 @@
                             <th>Ámbito</th>
                             <th>Lat</th>
                             <th>Long</th>
+                            <th>Actualizado por</th>
                             <th>&nbsp;</th>
                         </tr>
                         </tfoot>
@@ -494,7 +496,7 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group form-md-line-input has-success">
-                                            <input type="text" class="form-control" id="coperativa" name="coperativa" data-type='number' required>
+                                            <input type="text" class="form-control" id="coperativa" name="coperativa" data-type='number' required data-rule-min="0" data-rule-max="100">
                                             <label for="coperativa">Capacidad operativa % (mes)<span class="required" aria-required="true">*</span></label>
                                         </div>
                                     </div>

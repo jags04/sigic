@@ -70,6 +70,7 @@
                             <th>Lat</th>
                             <th>Long</th>
                             <th title="Numero de asignaciones DICOM">A DICOM</th>
+                            <th># plantas</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
@@ -96,6 +97,7 @@
                             <th>Email</th>
                             <th>Lat</th>
                             <th>Long</th>
+                            <th>&nbsp;</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>

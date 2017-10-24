@@ -690,8 +690,10 @@ class MapasController extends Controller
                     DB::raw("(select inventario from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0 ) as inventario"),
                     DB::raw("(select pprincipal from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0 ) as pprincipal"),
                     DB::raw("(select foto from planta_info_comp where planta_id = plantas.id order by fecha desc  limit 1 offset 0 ) as foto"),
+                    DB::raw("(select users.nombre from users inner join logs on users.user = logs.usuario where (logs.modulo like 'PLANTAS-INFO COMPL' and logs.accion like 'AGREGAR%' and logs.accion like concat('%',plantas.id)) ORDER BY logs.created_at desc limit 1 offset 0) as actualizado"),
                     "ambitos.nombre")
                 ->where($where)
+                //->toSql();
                 ->get();
 
             $kml='<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"><Document><name>Mapa Industrias</name>
@@ -768,6 +770,12 @@ class MapasController extends Controller
                     <tr>
                         <td style="border: 1px #999999 solid;" colspan="3">'.$emp->pprincipal.'</td>
                     </tr>
+                    <tr bgcolor="#D4E4F3">
+                        <td style="border: 1px #999999 solid;" colspan="3">Actualizado por</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px #999999 solid;" colspan="3">'.$emp->actualizado.'</td>
+                    </tr>
                     <tr>
                         <td style="text-align: center;border: 1px #999999 solid;" colspan="3">';
                 if(empty($emp->foto)){
@@ -779,6 +787,7 @@ class MapasController extends Controller
 
                 $kml.='</td>
                     </tr>
+                    
                 </table>
             </td>
         </tr>

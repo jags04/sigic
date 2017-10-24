@@ -57,7 +57,8 @@ class EmpresasController extends Controller
                 "empresas.email",
                 "empresas.latitud",
                 "empresas.longitud",
-                DB::raw("(select count(dicom.rif) from dicom where dicom.rif = empresas.rif) as dicom")
+                DB::raw("(select count(dicom.rif) from dicom where dicom.rif = empresas.rif) as dicom"),
+                DB::raw("(select count(plantas.id) from plantas where plantas.emp_rif = empresas.rif) as plantas")
             );
 
         return Datatables::of($empresas)
@@ -536,7 +537,7 @@ class EmpresasController extends Controller
             $permisos = UtilidadesController::getPermisologia($solicitud[0]->id);
             $mprima = UtilidadesController::getMprima($solicitud[0]->id);*/
 
-           $empresa = $empresas = DB::table('empresas')
+           $empresa = DB::table('empresas')
                /*->join('estados', 'empresas.edo', '=', 'estados.id')
                ->join('municipios', 'empresas.mcpio', '=', 'municipios.id')
                ->join('parroquias', 'empresas.pquia', '=', 'parroquias.id')
@@ -560,7 +561,8 @@ class EmpresasController extends Controller
                    "empresas.telefonos",
                    "empresas.email",
                    "empresas.latitud",
-                   "empresas.longitud")
+                   "empresas.longitud",
+                   DB::raw("(select count(plantas.id) from plantas where plantas.emp_rif = empresas.rif) as plantas"))
                ->where('id', $request->id)->get();
 
             /*$dproduccion = DB::table('produccion')->select("rif", DB::raw("date_part('year', fecha) as anio"))->where('rif', $empresa[0]->rif )->orderBy('anio', 'asc')->get();

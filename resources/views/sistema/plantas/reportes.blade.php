@@ -287,6 +287,7 @@
                                     <th>Parroquia</th>
                                     <th>Ámbito</th>
                                     <th>% de producción</th>
+                                    <th># trabajadores</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -320,15 +321,22 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <br><br><br>
-                            <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pPorProEdo" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.preportes.getPocentajeProdEdo') !!}">
-                                <thead>
-                                <tr>
-                                    <th>Estado</th>
-                                    <th>% de producción</th>
-                                </tr>
-                                </thead>
-                            </table>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <br><br><br>
+                                    <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pPorProEdo" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.preportes.getPocentajeProdEdo') !!}" data-urlgrafico="{!! route('sistema.preportes.getPlantasProdMap') !!}">
+                                        <thead>
+                                        <tr>
+                                            <th>Estado</th>
+                                            <th>% de producción</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="col-md-8">
+                                    <iframe id="ifrGrafMapProd" frameborder="0" width="100%" height="700" scrolling="no"></iframe>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- END MARKERS PORTLET-->
@@ -410,7 +418,6 @@
 @endsection
 
 @section('scripts')
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyCcFZBu19UJ3rBx2HLn2ldA-6biMN37wh0" type="text/javascript"></script>
     <script src="{{ URL::to('assets/global/plugins/formstone/dist/js/core.js') }}" type="text/javascript"></script>
     <script src="{{ URL::to('assets/global/plugins/formstone/dist/js/upload.js') }}" type="text/javascript"></script>
 

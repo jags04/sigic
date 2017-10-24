@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group form-md-line-input has-success">
-                                        <input type="text" class="form-control" id="coperativa2" name="coperativa" data-type='number' required>
+                                        <input type="text" class="form-control" id="coperativa2" name="coperativa" data-type='number' required data-rule-min="0" data-rule-max="100">
                                         <label for="coperativa2">Capacidad operativa % (mes)<span class="required" aria-required="true">*</span></label>
                                     </div>
                                 </div>

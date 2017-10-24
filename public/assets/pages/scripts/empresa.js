@@ -88,6 +88,7 @@ $(function(){
                 { data: 'latitud', name: 'empresas.latitud', orderable: false, searchable: false, visible: false },
                 { data: 'longitud', name: 'empresas.longitud', orderable: false, searchable: false, visible: false },
                 { data: 'dicom', name: 'dicom', searchable: false , 'width': '10%'},
+                { data: 'plantas', name: 'plantas', orderable: false, searchable: false, visible: false },
                 { data: 'accion', name: 'accion', orderable: false, searchable: false}
             ],
         initComplete: function () {
@@ -292,19 +293,20 @@ $(function(){
                     html = '<div class="row">'+
                         '<div class="col-md-4">RIF: <strong>'+item.rif+'</strong></div>'+
                         '<div class="col-md-8">Razón social: <strong>'+item.rsocial+'</strong></div>'+
-                        '</div>'+
+                        '</div><br>'+
                         '<div class="row">'+
                         '<div class="col-md-4">Estado: <strong>'+item.estado+'</strong></div>'+
                         '<div class="col-md-4">Municipio: <strong>'+item.municipio+'</strong></div>'+
                         '<div class="col-md-4">Parroquia: <strong>'+item.parroquia+'</strong></div>'+
-                        '</div>'+
+                        '</div><br>'+
                         '<div class="row">'+
                         '<div class="col-md-12">Dirección: <strong>'+item.localidad+'</strong></div>'+
-                        '</div>'+
+                        '</div><br>'+
                         '<div class="row">'+
-                        '<div class="col-md-10">Actividad económica: <strong>'+item.acteconomica+'</strong></div>'+
+                        '<div class="col-md-8">Actividad económica: <strong>'+item.acteconomica+'</strong></div>'+
                         '<div class="col-md-2">Nº trabajadores: <strong>'+item.trabajadores+'</strong></div>'+
-                        '</div>'+
+                        '<div class="col-md-2">Nº plantas: <strong>'+item.plantas+'</strong></div>'+
+                        '</div><br>'+
                         '<div class="row">'+
                         '<div class="col-md-4">Sector: <strong>'+item.sector+'</strong></div>'+
                         '<div class="col-md-4">Subsector: <strong>'+item.subsector+'</strong></div>'+
@@ -313,15 +315,15 @@ $(function(){
                         '<br><br>'+
                         '<div class="row">'+
                         '<div class="col-md-12">Representante legal<hr></div>'+
-                        '</div>'+
+                        '</div><br>'+
                         '<div class="row">'+
                         '<div class="col-md-8">Nombre: <strong>'+item.rlegal+'</strong></div>'+
                         '<div class="col-md-4">Cédula de identidad: <strong>'+item.ci+'</strong></div>'+
-                        '</div>'+
+                        '</div><br>'+
                         '<div class="row">'+
                         '<div class="col-md-6">Teléfonos: <strong>'+item.telefonos+'</strong></div>'+
                         '<div class="col-md-6">Email: <strong>'+item.email+'</strong></div>'+
-                        '</div>';
+                        '</div><br>';
                     rif = item.rif;
                 })
 

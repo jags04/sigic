@@ -107,8 +107,9 @@ $(function() {
                 {data: 'estado', name: 'plantas.estado', orderable: false},
                 {data: 'municipio', name: 'plantas.municipio', orderable: false, searchable: false, visible: false},
                 {data: 'parroquia', name: 'plantas.parroquia', orderable: false, searchable: false},
-                {data: 'ambito', name: 'plantas.ambito', orderable: false, searchable: false},
-                {data: 'produccion', name: 'produccion', orderable: false, searchable: false}
+                {data: 'ambito', name: 'plantas.ambito'},
+                {data: 'produccion', name: 'produccion', orderable: false, searchable: false},
+                {data: 'trabajadores', name: 'trabajadores', orderable: false, searchable: false}
             ]
         });
         return cdia;
@@ -121,6 +122,7 @@ $(function() {
             $("#divEPNFecha").html(fi[2] + '/' + fi[1] + '/' + fi[0] + ' al ' + ff[2] + '/' + ff[1] + '/' + ff[0])
             dt_rppce = c_porc_edo($('#dt_pPorProEdo').data('urldata') + '?f1=' + $("#fpe1").val() + '&f2=' + $("#fpe2").val(), $('#dt_pPorProEdo').data('lenguaje'));
             $("#modalPorcentajeEstados").modal('show');
+            $('#ifrGrafMapProd').attr('src', $('#dt_pPorProEdo').data('urlgrafico') + '?f1=' + $("#fpe1").val() + '&f2=' + $("#fpe2").val())
         }
     });
 
@@ -129,11 +131,12 @@ $(function() {
             processing: true,
             serverSide: true,
             responsive: true,
-            //paging: false,
+            searching: false,
+            paging: false,
             destroy: true,
-            order: [[0, "asc"]],
+            order: [[1, "desc"]],
             lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
-            pageLength: 10,
+            pageLength: 24,
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             buttons: [{
                 extend: 'excelHtml5',

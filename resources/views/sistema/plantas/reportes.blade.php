@@ -245,6 +245,7 @@
                                     <th>N critico</th>
                                     <th>Observación</th>
                                     <th>Foto</th>
+                                    <th>Actualizado por</th>
                                 </tr>
                                 </thead>
                             </table>

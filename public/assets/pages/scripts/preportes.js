@@ -69,6 +69,7 @@ $(function() {
                 {data: 'ncritico',name: 'planta_info_comp.ncritico',orderable: false,searchable: false,visible: false },
                 {data: 'observacion', name: 'planta_info_comp.observacion',orderable: false,searchable: false,visible: false},
                 {data: 'foto', name: 'foto',orderable: false,searchable: false,visible: false},
+                {data: 'actualizado', name: 'actualizado',orderable: false,searchable: false,visible: false},
             ]
         });
         return cdia;

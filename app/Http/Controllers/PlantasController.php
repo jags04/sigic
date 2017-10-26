@@ -540,7 +540,8 @@ class PlantasController extends Controller
                 "planta_info_comp.pprincipal",
                 "planta_info_comp.ncritico",
                 "planta_info_comp.observacion",
-                "planta_info_comp.foto")
+                "planta_info_comp.foto",
+                DB::raw("(select users.nombre from users inner join logs on users.user = logs.usuario where (logs.modulo like 'PLANTAS-INFO COMPL' and logs.accion like 'AGREGAR%' and logs.accion like concat('%',plantas.id)) ORDER BY logs.created_at desc limit 1 offset 0) as actualizado"))
                 ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2]);
 
         return Datatables::of($plantas)

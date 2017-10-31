@@ -561,8 +561,10 @@ class PlantasController extends Controller
             ->join('plantas', 'planta_info_comp.planta_id', '=', 'plantas.id')
             ->select(
                 "plantas.estado",
-                "plantas.municipio",
-                "plantas.parroquia",
+                DB::raw("(select p.municipio from plantas p where p.estado = plantas.estado order by p.municipio asc LIMIT 1 offset 0 ) as municipio"),
+                DB::raw("(select p.parroquia from plantas p where p.estado = plantas.estado order by p.parroquia asc LIMIT 1 offset 0 ) as parroquia"),
+               /* "plantas.municipio",
+                "plantas.parroquia",*/
                 "plantas.ambito",
                 DB::raw("avg(planta_info_comp.coperativa) as produccion"),
                 DB::raw("sum(planta_info_comp.mobra) as trabajadores"))

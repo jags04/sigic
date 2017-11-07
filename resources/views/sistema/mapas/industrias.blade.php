@@ -128,47 +128,52 @@
                     markerclusterer.addMarker(marker);
                 }
             });
-            google.maps.event.addListener(myParser,'parsed', function() {
-                /*var b = performance.now();
-                document.getElementById('perf').innerHTML = 'load time ' + ((b - a)/1000).toFixed(2) + ' seconds';*/
-                hideLoad();
-            });
-
 
             estados = ["AMAZONAS","ANZOATEGUI","APURE","ARAGUA","BARINAS","BOLIVAR","CARABOBO","COJEDES","DELTA AMACURO","DTTO. CAPITAL","FALCON","GUARICO","LARA","MERIDA","MIRANDA","MONAGAS","NUEVA ESPARTA","PORTUGUESA","SUCRE","TACHIRA","TRUJILLO","VARGAS","YARACUY","ZULIA"];
 
 
             @if(isset($request->rif))
-               myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?rif={!! $request->rif !!}']);
-               $('#etiqueta').empty().html('EMPRESA ESPECÍFICA');
-               $('#cargaAmb').click(function(){
-                   myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
-               })
+            myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?rif={!! $request->rif !!}']);
+            $('#etiqueta').empty().html('EMPRESA ESPECÍFICA');
+            $('#cargaAmb').click(function(){
+                showLoad();
+                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
+            })
             @elseif(isset($request->edo))
-               myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?edo={!! $request->edo !!}']);
+            myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?edo={!! $request->edo !!}']);
             $('#etiqueta').empty().html('ESTADO: {!! $request->edo !!}');
             $('#cargaAmb').click(function(){
+                showLoad();
                 myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}?edo={!! $request->edo !!}']);
             })
             @elseif(isset($request->sec))
-               myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?sector={!! $request->sec !!}']);
+            myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?sector={!! $request->sec !!}']);
             $('#etiqueta').empty().html('SECTOR: {!! $request->sec !!}');
             $('#cargaAmb').click(function(){
+                showLoad();
                 myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
             })
             @elseif(isset($request->subsector))
             myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}?sec_cla={!! $request->sec_cla !!}&subsector={{ $request->subsector }}']);
             $('#etiqueta').empty().html('SECTOR: {{ $request->sec_cla }} - SUBSECTOR: {{ $request->subsector }}');
             $('#cargaAmb').click(function(){
+                showLoad();
                 myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
             })
             @else
             myParser.parse(['{{ route('sistema.mapasKmzIndustria') }}']);
             $('#etiqueta').empty().html('GENERAL');
             $('#cargaAmb').click(function(){
+                showLoad();
                 myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
             })
             @endif
+
+            google.maps.event.addListener(myParser,'parsed', function() {
+                /*var b = performance.now();
+                document.getElementById('perf').innerHTML = 'load time ' + ((b - a)/1000).toFixed(2) + ' seconds';*/
+                hideLoad();
+            });
 
         }
 

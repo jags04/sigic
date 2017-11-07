@@ -718,4 +718,44 @@ class EmpresasController extends Controller
         }
 
     }
+
+    public function getIndexReportes(){
+        return view('sistema.empresas.reportes');
+    }
+
+    public function getEmpresasActualizadas(Request $request)
+    {
+        $empresas = DB::table('empresas')
+            ->join('logs', 'empresas.rif', '=', 'logs.empresa')
+            ->select(
+                DB::raw("to_char(logs.fecha, 'DD/MM/YYYY') as fecha"),
+                "empresas.rif",
+                "empresas.rsocial",
+                "empresas.estado",
+                "empresas.municipio",
+                "empresas.parroquia",
+                "empresas.trabajadores",
+                "empresas.acteconomica",
+                "empresas.motor",
+                "empresas.sector",
+                "empresas.subsector",
+                "empresas.rlegal",
+                "empresas.ci",
+                "empresas.telefonos",
+                "empresas.email",
+                "logs.accion",
+                DB::raw("(select users.nombre from users where users.user = logs.usuario) as actualizado_por")
+            )
+            ->whereBetween('logs.fecha', [$request->f1.' 00:00:00', $request->f2.' 23:59:59'])
+            ->where('logs.modulo', 'ilike', '%EMPRESA%');
+
+        return Datatables::of($empresas)
+            ->filterColumn('fecha', function ($query, $keyword) {
+                $query->whereRaw("to_char(fecha, 'DD/MM/YYYY') ilike ?", ["%$keyword%"]);
+            })
+            ->filterColumn('actualizado_por', function ($query, $keyword) {
+                $query->whereRaw("(select users.nombre from users where users.user = logs.usuario) ilike ?", ["%$keyword%"]);
+            })
+            ->make(true);
+    }
 }

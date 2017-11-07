@@ -8,4 +8,8 @@ class PoligonoAmbito extends Model
 {
     //
     protected $table = 'ambitos_poligonos';
+
+    protected $fillable = [
+        'coordenadas'
+    ];
 }

@@ -37,6 +37,9 @@
         </div>
         <br>
         <button  class="btn btn-no-border btn-outline green" id="cargaAmb">Cargar ambitos</button>
+        <br>
+        <button  class="btn btn-no-border btn-outline green" onclick="javascript:location.reload()">Actualizar mapa</button>
+
     </div>
 @endsection
 
@@ -118,15 +121,62 @@
                 zoom: true,
                 createMarker:function(placemark){
                     var point = placemark.latlng;
-                    var marker = new google.maps.Marker({position:point,icon: placemark.style.icon});
+                    var marker = new google.maps.Marker({
+                        position:point,
+                        icon: placemark.style.icon,
+                        @if(Auth::user()->rol == 10 || Auth::user()->rol == 1) draggable:true @endif
+                    });
                     var info = "<div class='tinfo'>" + placemark.description + "</div>";
                     google.maps.event.addListener(marker, "click", function(){
                         infoBubble.setContent(info);
                         infoBubble.open(myMap, marker);
                     });
+                    @if(Auth::user()->rol == 10 || Auth::user()->rol == 1)
+                    google.maps.event.addListener(marker,'dragend',function(event) {
+                        if(confirm('Desea cambiar la ubicacion de esta marca de posicion?')){
+                            idt = placemark.name.split('-');
+                            $.get( "{!! route('sistema.plantas.actCoor') !!}",{id: idt[0], latitud: this.position.lat(), longitud: this.position.lng(), rnd: Math.random(), _token: '{{ csrf_token() }}' }, function( data ) {
+                                alert(data);
+                                //javascript:location.reload()
+                            });
+                        }
+                    });
+                    @endif
+
                     markerclusterer.addMarker(marker);
                 }
             });
+            /* google.maps.event.addListener(myParser,'parsed', function() {
+                *var b = performance.now();
+                  document.getElementById('perf').innerHTML = 'load time ' + ((b - a)/1000).toFixed(2) + ' seconds';
+                hideLoad();
+            });*/
+
+
+            @if(isset($request->amb))
+            myParser.parse(['{{ route('sistema.getKmzPlantas') }}?amb={!! $request->amb !!}']);
+            $('#etiqueta').empty().html('ÁMBITO {!! $request->amb !!}');
+            $('#cargaAmb').click(function(){
+                showLoad();
+                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
+            })
+            @elseif(isset($request->edo))
+            myParser.parse(['{{ route('sistema.getKmzPlantas') }}?edo={!! $request->edo !!}']);
+            $('#etiqueta').empty().html('ESTADO: {!! $request->edo !!}');
+            $('#cargaAmb').click(function(){
+                showLoad();
+                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}?edo={!! $request->edo !!}']);
+            })
+            @else
+            myParser.parse(['{{ route('sistema.getKmzPlantas') }}']);
+            $('#etiqueta').empty().html('GENERAL');
+            $('#cargaAmb').click(function(){
+                showLoad();
+                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
+            })
+            @endif
+
+
             google.maps.event.addListener(myParser,'parsed', function() {
                 /*var b = performance.now();
                  document.getElementById('perf').innerHTML = 'load time ' + ((b - a)/1000).toFixed(2) + ' seconds';*/
@@ -134,30 +184,6 @@
             });
 
 
-            @if(isset($request->amb))
-            myParser.parse(['{{ route('sistema.getKmzPlantas') }}?amb={!! $request->amb !!}']);
-            $('#etiqueta').empty().html('ÁMBITO {!! $request->amb !!}');
-            $('#cargaAmb').click(function(){
-                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
-            })
-            @elseif(isset($request->edo))
-            myParser.parse(['{{ route('sistema.getKmzPlantas') }}?edo={!! $request->edo !!}']);
-            $('#etiqueta').empty().html('ESTADO: {!! $request->edo !!}');
-            $('#cargaAmb').click(function(){
-                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}?edo={!! $request->edo !!}']);
-            })
-            @else
-            myParser.parse(['{{ route('sistema.getKmzPlantas') }}']);
-            $('#etiqueta').empty().html('GENERAL');
-            $('#cargaAmb').click(function(){
-                myParser.parse(['{{ route('sistema.mapasKmzAmbitos') }}']);
-            })
-            @endif
-
-
-
-
-           // myParser.parse(['{{ route('sistema.mapasKmzComercio') }}']);
         }
         $(function () {
             initialize();

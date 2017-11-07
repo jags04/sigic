@@ -571,8 +571,8 @@ class PlantasController extends Controller
             //->where("plantas.fespecifica", "ilike", "%PRODUCC%")
             ->whereBetween('planta_info_comp.fecha', [$request->f1, $request->f2])
             ->groupBy('plantas.estado')
-            ->groupBy('plantas.municipio')
-            ->groupBy('plantas.parroquia')
+            /*->groupBy('plantas.municipio')
+            ->groupBy('plantas.parroquia')*/
             ->groupBy('plantas.ambito');
 
         return Datatables::of($ambitos)
@@ -738,6 +738,127 @@ class PlantasController extends Controller
         );
 
         return view('sistema.plantas.graficos.mapaProd', compact('datos'));
+    }
+
+    public function getEmpresasSegmentacion(Request $request)
+    {
+
+
+        $seg = DB::select( DB::raw("select 'GRANDE' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) > 100
+           ) as cantidad
+        ) as cant
+        
+        UNION
+        
+        select 'MEDIANA' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) <= 100 and sum(planta_info_comp.mobra) > 50
+           ) as cantidad
+        ) as cant
+        
+        UNION
+        
+        select 'PEQUEÑA' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif 
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) <= 50 
+           ) as cantidad
+        ) as cant
+        order by descripcion asc") );
+
+        return Datatables::of($seg)->make(true);
+    }
+
+    public function getEmpresasSegGrafico(Request $request)
+    {
+        $data = array();
+
+        $seg = DB::select( DB::raw("select 'GRANDE' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) > 100
+           ) as cantidad
+        ) as cant
+        
+        UNION
+        
+        select 'MEDIANA' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) <= 100 and sum(planta_info_comp.mobra) > 50
+           ) as cantidad
+        ) as cant
+        
+        UNION
+        
+        select 'PEQUEÑA' as descripcion ,
+        ( SELECT count(*) as cant from 
+           (select
+            empresas.rif 
+            FROM
+            empresas
+                inner join plantas on empresas.rif = plantas.emp_rif
+                inner join planta_info_comp on plantas.id = planta_info_comp.planta_id
+            where planta_info_comp.fecha BETWEEN '".$request->f1."' and '".$request->f2."'
+                group by empresas.rif
+                HAVING sum(planta_info_comp.mobra) <= 50 
+           ) as cantidad
+        ) as cant
+        order by descripcion asc") );
+
+        foreach ($seg as $p){
+
+            $data[] = "{name: '".$p->descripcion."', y: ".$p->cant.", sliced: true }";
+        }
+
+        $datos = [
+            ['f1' => UtilidadesController::convertirFecha($request->f1)],
+            ['f2' => UtilidadesController::convertirFecha($request->f2)],
+            ['data' => implode(',', $data)]
+        ];
+
+        // dd($datos);
+
+        return view('sistema.plantas.graficos.segEmp', compact('datos'));
     }
 
 

@@ -155,7 +155,7 @@
     </form>
 </div>
 
-<div class="modal fade" id="uplFoto" tabindex="-1" role="basic" aria-hidden="true">
+<div class="modal fade" id="uplFoto" tabindex="-1" role="basic" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">

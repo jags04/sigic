@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    .:: Reportes Plantas ::.
+    .:: Reportes Empresas ::.
 @endsection
 
 @section('styles')
@@ -41,7 +41,7 @@
             <i class="fa fa-circle"></i>
         </li>
         <li>
-            <span>Plantas</span>
+            <span>Empresas</span>
         </li>
     </ul>
     <!--<div class="page-toolbar">
@@ -50,7 +50,7 @@
 @endsection
 
 @section('page-title')
-    Reportes plantas
+    Reportes empresas
     <!--<small>(Registro Único de Industria y Comercio)</small>-->
 @endsection
 
@@ -60,11 +60,11 @@
             <div class="portlet box green">
                 <div class="portlet-title">
                     <div class="caption">
-                        <span class="caption-subject bold uppercase">Plantas actualizadas</span>
+                        <span class="caption-subject bold uppercase">Empresas actualizadas</span>
                     </div>
                 </div>
                 <div class="portlet-body">
-                    <form id="qryPlanAct">
+                    <form id="qryEmpAct">
                         {{ csrf_field()  }}
                         <div class="row">
                             <div class="col-sm-12">
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-xs-12 col-sm-6">
+        <!--<div class="col-lg-4 col-xs-12 col-sm-6">
             <div class="portlet box green">
                 <div class="portlet-title">
                     <div class="caption">
@@ -163,10 +163,10 @@
 
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 
-    <div class="row">
+    <!--<div class="row">
         <div class="col-lg-4 col-xs-12 col-sm-6">
             <div class="portlet box green">
                 <div class="portlet-title">
@@ -203,46 +203,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-xs-12 col-sm-6">
-            <div class="portlet box green">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <span class="caption-subject bold uppercase">Segmentación Empresas </span>(M obra plantas)
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <form id="qryEmpSeg">
-                        {{ csrf_field()  }}
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group form-md-line-input has-success">
-                                    <input type="date" class="form-control" id="fes1" name="f1" required>
-                                    <label for="fps1">Fecha inicio<span class="required" aria-required="true">*</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group form-md-line-input has-success">
-                                    <input type="date" class="form-control" id="fes2" name="f2" required>
-                                    <label for="fps2">Fecha fin<span class="required" aria-required="true">*</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <button type="submit" class="btn btn-no-border btn-outline green  pull-right">Consultar</button>
-                            </div>
-                        </div>
-                    </form>
+    </div>-->
 
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="modalPlantasActualizadas" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="modalEmpresasActualizadas" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-full">
             <div class="modal-content">
                 <div class="modal-body">
@@ -250,7 +213,7 @@
                     <div class="portlet light portlet-fit">
                         <div class="portlet-title">
                             <div class="caption">
-                                <span class="caption-subject font-green bold uppercase">Reporte Plantas Actualizadas (<span id="divNFecha"></span>)</span>
+                                <span class="caption-subject font-green bold uppercase">Reporte Empresas Actualizadas (<span id="divNFecha"></span>)</span>
                             </div>
                             <div class="actions">
                                 <a class="btn btn-circle btn-icon-only btn-default" data-dismiss="modal" aria-hidden="true">
@@ -260,32 +223,21 @@
                         </div>
                         <div class="portlet-body">
                             <br><br><br>
-                            <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pAct" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.preportes.getPlantasAct') !!}">
+                            <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pAct" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.ereportes.getEmpAct') !!}">
                                 <thead>
                                 <tr>
                                     <th>Fecha</th>
                                     <th>RIF</th>
                                     <th>Empresa</th>
+                                    <th>Estado</th>
+                                    <th>Municipio</th>
+                                    <th>Parroquia</th>
                                     <th>Sector</th>
                                     <th>Subsector</th>
                                     <th>R legal</th>
                                     <th>CI</th>
                                     <th>Telefonos</th>
-                                    <th>Estado</th>
-                                    <th>Municipio</th>
-                                    <th>Parroquia</th>
-                                    <th>Estatus</th>
-                                    <th>Ámbito</th>
-                                    <th>Telf. planta</th>
-                                    <th>M obra</th>
-                                    <th>Cap instalada (mes)</th>
-                                    <th>Cap operativa (mes)</th>
-                                    <th>Produccion (mes)</th>
-                                    <th>Inventario (dias)</th>
-                                    <th>P principal</th>
-                                    <th>N critico</th>
-                                    <th>Observación</th>
-                                    <th>Foto</th>
+                                    <th>Accion</th>
                                     <th>Actualizado por</th>
                                 </tr>
                                 </thead>
@@ -439,53 +391,6 @@
         <!-- /.modal-dialog -->
     </div>
 
-    <div id="modalEmpSeg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-full">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <!-- BEGIN MARKERS PORTLET-->
-                    <div class="portlet light portlet-fit">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <span class="caption-subject font-green bold uppercase">Segmentación Empresas - M obra plantas (<span id="divSegEFecha"></span>)</span>
-                            </div>
-                            <div class="actions">
-                                <a class="btn btn-circle btn-icon-only btn-default" data-dismiss="modal" aria-hidden="true">
-                                    <i class="fa fa-close"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <br><br><br>
-                                    <table class="table table-striped table-hover" style="width: 100% !important;" id="dt_pEmp" data-lenguaje="{{ URL::to('assets/global/plugins/datatables/spanish.json') }}" data-urldata="{!! route('sistema.preportes.getEmpSeg') !!}" data-urlgrafico="{!! route('sistema.preportes.getEmpSegGraf') !!}">
-                                        <thead>
-                                        <tr>
-                                            <th>Descripcion</th>
-                                            <th>Cantidad</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                                <div class="col-md-8">
-                                    <iframe id="ifrGrafSegEmp" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <!-- END MARKERS PORTLET-->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-no-border btn-outline green">Aceptar</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
 
 
 
@@ -516,7 +421,7 @@
 
 @section('script-body')
     <script src="{{ URL::to('assets/global/plugins/jquery-ui/jquery-ui.min.js') }}" type="text/javascript"></script>
-    <script src="{{ URL::to('assets/pages/scripts/preportes.js') }}" type="text/javascript"></script>
+    <script src="{{ URL::to('assets/pages/scripts/ereportes.js') }}" type="text/javascript"></script>
     <script>
 
     </script>

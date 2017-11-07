@@ -50,10 +50,10 @@
                             <span class="arrow "></span>-->
         </a>
     </li>
-    <li class="nav-item @if( Request::segment(1) == 'empresas' || Request::segment(1) == 'plantas' || Request::segment(1) == 'preportes' ) active open @endif">
+    <li class="nav-item @if( Request::segment(1) == 'empresas' || Request::segment(1) == 'plantas' ) active open @endif">
         <a href="javascript:;" class="nav-link nav-toggle">
             <i class="fa fa-industry"></i>
-            <span class="title">Empresas</span>
+            <span class="title">Empresas / Plantas</span>
             @if( Request::segment(1) == 'empresas' ||  Request::segment(1) == 'plantas' )
                 <span class="selected"></span>
             @endif
@@ -76,14 +76,14 @@
                 </a>
             </li>
             @if(Auth::user()->rol == 10 || Auth::user()->rol == 1 || Auth::user()->rol == 2)
-            <li class="nav-item  @if( Request::segment(1) == 'preportes' ) active open @endif">
+            <!--<li class="nav-item  @if( Request::segment(1) == 'preportes' ) active open @endif">
                 <a href="{{ route('sistema.preportes') }}" class="nav-link ">
                     <span class="title">Reportes (Plantas)</span>
                     @if( Request::segment(1) == 'prepo' )
                         <span class="selected"></span>
                     @endif
                 </a>
-            </li>
+            </li>-->
             @endif
         </ul>
 
@@ -125,6 +125,38 @@
          </li>
      </ul>-->
     </li>
+
+    @if(Auth::user()->rol == 10 || Auth::user()->rol == 1 || Auth::user()->rol == 2)
+        <li class="nav-item  @if( Request::segment(1) == 'preportes' || Request::segment(1) == 'ereportes' ) active open @endif">
+            <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="fa fa-list-ol"></i>
+                <span class="title">Reportes</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                @if(Auth::user()->rol == 10 || Auth::user()->rol == 1 )
+                    <li class="nav-item  @if( Request::segment(1) == 'ereportes') active open @endif">
+                        <a href="{{ route('sistema.ereportes') }}" class="nav-link ">
+                            <span class="title">Empresas</span>
+                            @if( Request::segment(1) == 'ereportes' )
+                                <span class="selected"></span>
+                            @endif
+                        </a>
+                    </li>
+                @endif
+                <li class="nav-item  @if( Request::segment(1) == 'preportes' ) active open @endif">
+                    <a href="{{ route('sistema.preportes') }}" class="nav-link ">
+                        <span class="title">Plantas</span>
+                        @if( Request::segment(1) == 'preportes' )
+                            <span class="selected"></span>
+                        @endif
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
+
+
     @if(Auth::user()->rol == 10 || Auth::user()->rol == 1 || Auth::user()->rol == 2)
         <li class="nav-item  @if( Request::segment(1) == 'usuarios' || Request::segment(1) == 'logs' ) active open @endif">
             <a href="javascript:;" class="nav-link nav-toggle">

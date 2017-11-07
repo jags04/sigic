@@ -129,7 +129,7 @@ $(function(){
 
     $('#addEmpresa').on('hidden.bs.modal', function (e) {
         $('#municipio, #parroquia, #sector, #subsector, #ciiu').find('option:not(:first)').remove();
-        $("#cnp option:last, #status option:last ").remove();
+        //$("#cnp option:last, #status option:last ").remove();
         $('#fAddEmp').clearForm();
     })
 

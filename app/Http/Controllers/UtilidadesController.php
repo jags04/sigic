@@ -179,7 +179,28 @@ class UtilidadesController extends Controller
         return response()->json($result);
     }
 
+    public function getAmbitoId(Request $request)
+    {
 
+        $where ='';
+
+        /* if(Auth::user()->rol == 2){
+             $where = "empresas.usuario = ".Auth::user()->id." and ";
+         }*/
+
+        $data = DB::select( DB::raw("select ambitos.nombre, ambitos.id from ambitos where ".$where." nombre ilike '%".$request->term."%'  and ambitos.estado ilike '%".$request->edo."%'  order by ambitos.nombre asc"));
+        $result = array();
+        if(count($data) != 0){
+            foreach ($data as $t){
+                array_push($result, array("label"=>$t->nombre, "value" => $t->id));
+            }
+        }
+        else{
+            array_push($result, array("label"=>'No se encontro ningún resultado', "value" => 'No se encontro ningún resultado'));
+        }
+
+        return response()->json($result);
+    }
 
     public function getComercioCoord(Request $request)
     {

@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/getComercioCoord',           ['uses' => 'UtilidadesController@getComercioCoord',    'as' => 'sistema.getComercioCoord']);
     Route::get('/query',                      ['uses' => 'UtilidadesController@generarQueryProduccionAsignacion', 'as' => 'sistema.query']);
     Route::get('/getAmbito',                  ['uses' => 'UtilidadesController@getAmbito',           'as' =>   'sistema.getAmbito']);
+    Route::get('/getAmbitoId',                ['uses' => 'UtilidadesController@getAmbitoId',         'as' =>   'sistema.getAmbitoId']);
 
     Route::get('/',                           ['uses' => 'IndexController@getIndex',                 'as' => 'sistema.index']);
     Route::post('/salir',                     ['uses' => 'IndexController@getLogout',                'as' => 'sistema.salir']);
@@ -88,6 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/plantas/upd',               ['uses' => 'PlantasController@actualizarPlanta',       'as' => 'sistema.plantas.upd']);
     Route::post('/plantas/del',               ['uses' => 'PlantasController@eliminarPlanta',         'as' => 'sistema.plantas.del']);
     Route::post('/plantas/view',              ['uses' => 'PlantasController@verEmpresa',             'as' => 'sistema.plantas.view']);
+    Route::get('/plantas/actCoord',           ['uses' => 'MapasController@actualizarCoodPlanta',     'as' => 'sistema.plantas.actCoor']);
 
     Route::post('/plantas/add/info',          ['uses' => 'PlantasController@agregarInfoComplementaria','as' => 'sistema.plantas.info.add']);
     Route::post('/plantas/info/add',          ['uses' => 'PlantasController@agregarInfoComplementaria','as' => 'sistema.plantas.info.add']);
@@ -105,6 +107,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/preportes/getPlantaSeg',     ['uses' => 'PlantasController@getPlantasSegmentacion', 'as' => 'sistema.preportes.getPlantasSeg']);
     Route::get('/preportes/getPlantaSegGraf', ['uses' => 'PlantasController@getPlantasSegGrafico',   'as' => 'sistema.preportes.getPlantasSegGraf']);
     Route::get('/preportes/getPlantasProdMap',['uses' => 'PlantasController@getPlantasProdMap',      'as' => 'sistema.preportes.getPlantasProdMap']);
+    Route::get('/preportes/getEmpSeg',        ['uses' => 'PlantasController@getEmpresasSegmentacion','as' => 'sistema.preportes.getEmpSeg']);
+    Route::get('/preportes/getEmpGraf',       ['uses' => 'PlantasController@getEmpresasSegGrafico',  'as' => 'sistema.preportes.getEmpSegGraf']);
+
+
+
+    Route::get('/ereportes',                  ['uses' => 'EmpresasController@getIndexReportes',       'as' => 'sistema.ereportes']);
+    Route::get('/ereportes/getEmpAct',        ['uses' => 'EmpresasController@getEmpresasActualizadas','as' => 'sistema.ereportes.getEmpAct']);
 
 
 
@@ -138,6 +147,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/ambitos/uplFoto',           ['uses' => 'AmbitosController@subirFoto',              'as' => 'sistema.ambitos.uplFoto']);
     Route::post('/ambitos/delFoto',           ['uses' => 'AmbitosController@eliminarFoto',           'as' => 'sistema.ambitos.delFoto']);
+
+    Route::any('/ambitos/editPol',            ['uses' => 'MapasController@editarPoligonoAmbito',     'as' => 'sistema.ambitos.editPol']);
+    Route::post('/ambitos/actCoordPol',       ['uses' => 'MapasController@actualizarCoodPolAmbito',  'as' => 'sistema.plantas.actCoordPol']);
+
+
 
     Route::get('/comercios',                  ['uses' => 'ComerciosController@getIndex',             'as' => 'sistema.comercios']);
     Route::get('/comercios/data',             ['uses' => 'ComerciosController@getData',              'as' => 'sistema.comercios.data']);

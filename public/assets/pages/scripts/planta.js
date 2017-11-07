@@ -119,7 +119,7 @@ $(function(){
 
     $('#addPlanta').on('hidden.bs.modal', function (e) {
         $('#municipio, #parroquia, #ambito').find('option:not(:first)').remove();
-        $("#status option:last ").remove();
+        //$("#status option:last ").remove();
         $('#fAddPlan').clearForm();
     })
 

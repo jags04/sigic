@@ -49,6 +49,31 @@
                 </div>
             </div>
             <!-- END Portlet PORTLET-->
+            <br>
+            <!-- BEGIN Portlet PORTLET-->
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">Buscar por ámbito </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="form-group form-md-line-input has-success">
+                        <select class="form-control" id="estado_amb" name="estado_amb" onchange=" getAmbitos('estado_amb', 'amb', '{!! route('sistema.getAmbitoId') !!}') " >
+                            <option value=""></option>
+                            @foreach($estado as $edo)
+                                <option value="{{ $edo->nombre }}">{{ $edo->nombre }}</option>
+                            @endforeach
+                        </select>
+                        <label for="estado">Estado</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-success">
+                        <select class="form-control" id="amb" name="amb" >
+                            <option value=""></option>
+                        </select>
+                        <label for="amb">Ámbito</label>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-10">
             <iframe frameborder="0" id="panelIfr"></iframe>
@@ -78,7 +103,39 @@
                     $('iframe').attr("src", "{!! route('sistema.mapasAmbitos') !!}?edo="+$('#estado').val());
                 }
             })
+
+            $('#amb').change(function () {
+                if($('#estado_amb').val()==''){
+                    alert('Debe elegir un estado de la lista!!!')
+                }
+                else{
+                    if($('#amb').val()==''){
+                        alert('Debe elegir un ambito de la lista!!!')
+                    }
+                    else{
+                        $('iframe').attr("src", "{!! route('sistema.mapasAmbitos') !!}?id="+$('#amb').val()+'&amb='+$('#amb option:selected').text());
+                        $('#etiqueta').empty().html();
+                    }
+
+                }
+            })
         })
+
+        function getAmbitos(el1, el2,  url){
+            $.ajax({
+                dataType: "json",
+                url: url,
+                data: { edo: $('#'+el1).val(), rand: Math.random() },
+                beforeSend: function() { $('#'+el2).addClass('ui-autocomplete-loading'); },
+                success: function(data) {
+                    $('#'+el2).find('option:not(:first)').remove().removeClass('ui-autocomplete-loading');
+                    $.each(data, function(i, item) {
+                        $('#'+el2).append($('<option>').text(item.label).attr('value', item.value));
+                    });
+                },
+                complete:function(){ $('#'+el2).removeClass('ui-autocomplete-loading'); }
+            });
+        }
 
     </script>
 @endsection

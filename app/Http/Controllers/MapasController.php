@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
+use App\Http\Controllers\UtilidadesController;
+use App\PoligonoAmbito;
+use App\Planta;
 use App\Empresa;
 use App\Estado;
 
@@ -495,7 +498,8 @@ class MapasController extends Controller
 
             $ambitos = DB::table('ambitos')
                 ->join('ambitos_poligonos', 'ambitos.id', '=', 'ambitos_poligonos.ambito_id')
-                ->select("ambitos.estado",
+                ->select("ambitos.id",
+                    "ambitos.estado",
                     "ambitos.municipio",
                     "ambitos.parroquia",
                     "ambitos.nombre",
@@ -506,6 +510,7 @@ class MapasController extends Controller
                     "ambitos.iinactivos",
                     "ambitos.paeconomica",
                     "ambitos.paproductiva",
+                    "ambitos_poligonos.id as pol_id",
                     "ambitos_poligonos.coordenadas")
                 ->where($where)
                 ->get();
@@ -524,7 +529,7 @@ class MapasController extends Controller
 
             foreach ($ambitos as $amb){
                 $kml.='<Placemark>
-      <name>'.$amb->nombre.'</name>
+      <name>'.$amb->id.'-'.$amb->pol_id.'-'.$amb->nombre.'</name>
       <Snippet></Snippet>
       <description><![CDATA[<table style="font-family:Arial,Verdana,Times;font-size:14px;text-align:left;width:100%;border-collapse:collapse;">
         <tr style="text-align:center;font-weight:bold;background:#9CBCE2">
@@ -596,12 +601,22 @@ class MapasController extends Controller
 
             }
 
-
-
-
-
             $kml.='</Folder>
-  <Style id="PolyStyle00">
+    <Style id="PolyStyle00">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0.000000</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff6e6e6e</color>
+			<width>1</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>7fffff00</color>
+			<outline>1</outline>
+		</PolyStyle>
+	</Style>
+  <Style id="PolyStyle01">
     <LabelStyle>
       <color>00000000</color>
       <scale>0.000000</scale>
@@ -674,6 +689,7 @@ class MapasController extends Controller
                 ->join('empresas', 'plantas.emp_rif', '=', 'empresas.rif')
                 ->join('planta_info_comp', 'planta_info_comp.planta_id', '=', 'plantas.id')
                 ->select("empresas.rsocial",
+                    "plantas.id",
                     "plantas.estado",
                     "plantas.municipio",
                     "plantas.parroquia",
@@ -702,7 +718,7 @@ class MapasController extends Controller
             //dd($kml);
             foreach ($plantas as $emp){
                 $kml.='<Placemark>
-                  <name>'.UtilidadesController::limpiarCaracteresEspeciales($emp->rsocial).'</name>
+                  <name>'.$emp->id.'-'.UtilidadesController::limpiarCaracteresEspeciales($emp->rsocial).'</name>
                   <description><![CDATA[<table style="font-family:Arial,Verdana,Times;font-size:14px;text-align:left;width:100%;border-collapse:collapse;">
        <tr style="text-align:center;font-weight:bold;">
             <td>PLANTAS</td>
@@ -796,7 +812,7 @@ class MapasController extends Controller
                      <Style>
                        <IconStyle>
                          <scale>1</scale>
-                           <Icon><href>'.URL::to('assets/layouts/layout/img/markers/32x32/MapMarker_Flag1_Right_Pink.png').'</href></Icon>
+                           <Icon><href>'.URL::to('assets/layouts/layout/img/markers/32x32/MapMarker_PushPin1_Right_Pink.png').'</href></Icon>
                        </IconStyle>
                      </Style>';
 
@@ -831,6 +847,71 @@ class MapasController extends Controller
                     'status' => 0,
                     'msg' => $e->getCode().'-'.$e->getMessage()
                 ));
+            }
+        }
+    }
+
+    public function actualizarCoodPlanta(Request $request)
+    {
+        //dd($request->all());
+        try{
+            if(Planta::updateOrCreate(['id' => $request->id], $request->except(['_token', 'id', 'rnd']) )){
+                UtilidadesController::setLog(Auth::user()->user, 'PLANTAS', 'ACT COORDENADAS - '.$request->id);
+                return 'Registro actualizado';
+            }
+        }
+        catch (QueryException $e) {
+            if ($request->ajax()) {
+                return UtilidadesController::errorPostgres($e->getCode());
+            }
+        }
+        catch (Exception $e) {
+            if ($request->ajax()) {
+                return $e->getCode().'-'.$e->getMessage();
+            }
+        }
+    }
+
+    public function editarPoligonoAmbito(Request $request)
+    {
+        $pol_id = $request->pol_id;
+        $coordenadas = str_replace(')','',str_replace('(','',explode('),(', $request->pol)));
+
+        for( $i = 0; $i < sizeof($coordenadas); $i++){
+            list($lt, $lg) = explode(', ', $coordenadas[$i]);
+            $lat[] = $lt;
+            $lng[] = $lg;
+        }
+        for($i = 0; $i < sizeof($lat); $i++){
+            $coord[] = '{lat: '.$lat[$i].', lng: '.$lng[$i].'}';
+        }
+
+        $fpol = implode(',', $coord);
+
+        return view('sistema.mapas.editPoligono', compact('fpol', 'pol_id'));
+
+
+
+    }
+
+    public function actualizarCoodPolAmbito(Request $request)
+    {
+        //print_r($request->all());
+        //dd($request->all());
+        try{
+            if(PoligonoAmbito::updateOrCreate(['id' => $request->id], $request->except(['_token', 'id', 'rnd']) )){
+                UtilidadesController::setLog(Auth::user()->user, 'AMBITOS', 'ACT COORDENADAS POLIGONOS - '.$request->id);
+                return 'Registro actualizado';
+            }
+        }
+        catch (QueryException $e) {
+            if ($request->ajax()) {
+                return UtilidadesController::errorPostgres($e->getCode());
+            }
+        }
+        catch (Exception $e) {
+            if ($request->ajax()) {
+                return $e->getCode().'-'.$e->getMessage();
             }
         }
     }

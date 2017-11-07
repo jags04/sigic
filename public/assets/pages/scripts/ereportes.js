@@ -13,13 +13,13 @@ $(function() {
     });
     $(":input").inputmask();
 
-    $('#qryPlanAct').validate({
+    $('#qryEmpAct').validate({
         submitHandler: function (form) {
             fi = $("#fp1").val().split('-');
             ff = $("#fp2").val().split('-');
             $("#divNFecha").html(fi[2] + '/' + fi[1] + '/' + fi[0] + ' al ' + ff[2] + '/' + ff[1] + '/' + ff[0])
             dt_rdia = c_avance($('#dt_pAct').data('urldata') + '?f1=' + $("#fp1").val() + '&f2=' + $("#fp2").val(), $('#dt_pAct').data('lenguaje'));
-            $("#modalPlantasActualizadas").modal('show');
+            $("#modalEmpresasActualizadas").modal('show');
         }
     });
 
@@ -44,38 +44,27 @@ $(function() {
             language: {url: lg},
             ajax: url,
             columns: [
-                {data: 'fecha', name: 'planta_info_comp.fecha', orderable: false, searchable: false},
+                {data: 'fecha', name: 'fecha', orderable: false, searchable: false},
                 {data: 'rif', name: 'empresas.rif' },
                 {data: 'rsocial', name: 'empresas.rsocial' },
+                {data: 'estado', name: 'empresas.estado'},
+                {data: 'municipio', name: 'empresas.municipio', orderable: false, searchable: false, visible: false},
+                {data: 'parroquia', name: 'empresas.parroquia', orderable: false, searchable: false, visible: false},
+
                 {data: 'sector', name: 'empresas.sector' },
                 {data: 'subsector', name: 'empresas.subsector', orderable: false, searchable: false, visible: false},
 
                 {data: 'rlegal', name: 'empresas.rlegal', orderable: false, searchable: false, visible: false},
                 {data: 'ci', name: 'empresas.ci', orderable: false, searchable: false, visible: false},
                 {data: 'telefonos', name: 'empresas.telefonos', orderable: false, searchable: false, visible: false},
-                {data: 'estado', name: 'plantas.estado'},
-                {data: 'municipio', name: 'plantas.municipio', orderable: false, searchable: false, visible: false},
-                {data: 'parroquia', name: 'plantas.parroquia', orderable: false, searchable: false, visible: false},
-                {data: 'status', name: 'plantas.status', orderable: false, searchable: false, visible: false},
-                {data: 'ambito', name: 'plantas.ambito'},
-                {data: 'telf', name: 'plantas.telf', orderable: false, searchable: false, visible: false},
-
-                {data: 'mobra', name: 'planta_info_comp.mobra', orderable: false, searchable: false, visible: false},
-                {data: 'cinstalada', name: 'planta_info_comp.cinstalada', orderable: false, searchable: false},
-                {data: 'coperativa', name: 'planta_info_comp.coperativa', orderable: false, searchable: false},
-                {data: 'produccion', name: 'planta_info_comp.produccion', orderable: false, searchable: false},
-                {data: 'inventario',name: 'planta_info_comp.inventario',orderable: false,searchable: false,visible: false},
-                {data: 'pprincipal',name: 'planta_info_comp.pprincipal',orderable: false,searchable: false,visible: false},
-                {data: 'ncritico',name: 'planta_info_comp.ncritico',orderable: false,searchable: false,visible: false },
-                {data: 'observacion', name: 'planta_info_comp.observacion',orderable: false,searchable: false,visible: false},
-                {data: 'foto', name: 'foto',orderable: false,searchable: false,visible: false},
-                {data: 'actualizado', name: 'actualizado',orderable: false,searchable: false,visible: false},
+                {data: 'accion', name: 'logs.accion'},
+                {data: 'actualizado_por', name: 'actualizado_por',orderable: false },
             ]
         });
         return cdia;
     }
 
-    $('#qryPorProd').validate({
+   /* $('#qryPorProd').validate({
         submitHandler: function (form) {
             fi = $("#fpp1").val().split('-');
             ff = $("#fpp2").val().split('-');
@@ -93,7 +82,7 @@ $(function() {
             //paging: false,
             destroy: true,
             order: [[0, "asc"], [3, "asc"]],
-            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
+            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000, [5, 10, 25, 100, 500, 1000, 5000]],
             pageLength: 10,
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             buttons: [{
@@ -136,7 +125,7 @@ $(function() {
             paging: false,
             destroy: true,
             order: [[1, "desc"]],
-            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
+            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000], [5, 10, 25, 100, 500, 1000, 5000]],
             pageLength: 24,
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             buttons: [{
@@ -175,7 +164,7 @@ $(function() {
             searching: false,
             destroy: true,
             order: [[0, "asc"]],
-            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
+            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/], [5, 10, 25, 100, 500, 1000, 5000]],
             pageLength: 10,
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             buttons: [{
@@ -193,50 +182,6 @@ $(function() {
         });
         return cdia;
     }
-
-
-    $('#qryEmpSeg').validate({
-        submitHandler: function (form) {
-            fi = $("#fes1").val().split('-');
-            ff = $("#fes2").val().split('-');
-            $("#divSegEFecha").html(fi[2] + '/' + fi[1] + '/' + fi[0] + ' al ' + ff[2] + '/' + ff[1] + '/' + ff[0])
-            dt_rppse = c_emp_seg($('#dt_pEmp').data('urldata') + '?f1=' + $("#fes1").val() + '&f2=' + $("#fes2").val(), $('#dt_pEmp').data('lenguaje'));
-            $("#modalEmpSeg").modal('show');
-            $('#ifrGrafSegEmp').attr('src', $('#dt_pEmp').data('urlgrafico') + '?f1=' + $("#fes1").val() + '&f2=' + $("#fes2").val())
-        }
-    });
-
-    c_emp_seg = function (url, lg, f1, f2) {
-        cdia = $('#dt_pEmp').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            paging: false,
-            searching: false,
-            destroy: true,
-            order: [[0, "asc"]],
-            lengthMenu: [[5, 10, 25, 100, 500, 1000, 5000/*, -1*/], [5, 10, 25, 100, 500, 1000, 5000]],
-            pageLength: 10,
-            dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
-            buttons: [{
-                extend: 'excelHtml5',
-                text: '<i class="fa fa-file-excel-o fa-lg"></i>',
-                titleAttr: 'Excel',
-                className: 'btn btn-no-border btn-sm green-meadow btn-outline'
-            }],
-            language: {url: lg},
-            ajax: url,
-            columns: [
-                {data: 'descripcion', name: 'descripcion', orderable: false, searchable: false},
-                {data: 'cant', name: 'cant', orderable: false, searchable: false}
-            ]
-        });
-        return cdia;
-    }
-
-
-
-
-
+*/
 
 })
